@@ -6,7 +6,7 @@ the news text based.
 
 import webbrowser
 import requests
-import dn
+import vk
 
 
 class Header:
@@ -14,10 +14,11 @@ class Header:
     Header is a news header scraped from the news site.
     """
 
-    def __init__(self, title, text, url):
+    def __init__(self, title, text, url, premium=False):
         self.title = title
         self.text = text
         self.url = url
+        self.premium = premium
 
     def open_url(self):
         """
@@ -49,14 +50,15 @@ class Reader:
         result = self.headers()
 
         for header in result:
-            print(header.title)
+            print("{} {}".format(header.title, "💰" if header.premium else ""))
             print(header.text)
             print(header.url)
+
             print()
 
 
 def main():
-    dn.DN().print_cli()
+    vk.VK().print_cli()
 
 
 if __name__ == "__main__":
