@@ -51,7 +51,10 @@ class Reader:
 
         for header in result:
             print("{} {}".format(header.title, "💰" if header.premium else ""))
-            print(header.text)
+
+            if header.text:
+                print(header.text)
+
             print(header.url)
 
             print()
