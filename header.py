@@ -6,7 +6,6 @@ the news text based.
 
 import webbrowser
 import requests
-import dn
 
 
 class Header:
@@ -19,6 +18,16 @@ class Header:
         self.text = text
         self.url = url
         self.premium = premium
+
+    def __str__(self):
+        header = ["{} {}".format(self.title, "💰" if self.premium else "")]
+
+        if self.text:
+            header.append(self.text)
+
+        header.append(self.url)
+
+        return "\n".join(header)
 
     def open_url(self):
         """
@@ -50,19 +59,5 @@ class Reader:
         result = self.headers()
 
         for header in result:
-            print("{} {}".format(header.title, "💰" if header.premium else ""))
-
-            if header.text:
-                print(header.text)
-
-            print(header.url)
-
+            print(header)
             print()
-
-
-def main():
-    dn.DN().print_cli()
-
-
-if __name__ == "__main__":
-    main()
