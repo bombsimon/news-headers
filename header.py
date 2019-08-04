@@ -6,7 +6,7 @@ the news text based.
 
 import webbrowser
 import requests
-import svt
+import dn
 
 
 class Header:
@@ -61,7 +61,7 @@ class Reader:
 
 
 def main():
-    svt.SVT().print_cli()
+    dn.DN().print_cli()
 
 
 if __name__ == "__main__":
