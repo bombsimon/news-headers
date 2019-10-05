@@ -23,18 +23,14 @@ class Expressen(header.Reader):
         result = []
 
         for article in soup.find_all("div", class_="teaser"):
-            title = article.h2
-            text =  article.p
-            href = article.a
-
-            if title is None:
+            if article.h2 is None:
                 continue
 
             result.append(
                 header.Header(
-                    " ".join(title.get_text().split()),
-                    " ".join(text.get_text().split()),
-                    "{}{}".format(self.url(), href.get("href")),
+                    " ".join(article.h2.get_text().split()),
+                    " ".join(article.p.get_text().split()),
+                    "{}{}".format(self.url(), article.a.get("href")),
                     False,
                 )
             )
