@@ -5,8 +5,11 @@ including DOM parsing, using GraphQL, parsing `<script>` tags and more. :)
 
 * [Aftonbladet](https://aftonbladet.se)
 * [DN](https://dn.se)
+* [Expressen](https://expressen.se)
 * [SVT](https://svt.se)
-* [VK](https://vk.se)
+* [VK](https://vk.se)*
+
+*\* Must be initialized with a sha256 hash*
 
 ## Example usage
 
@@ -63,4 +66,22 @@ class MySite(header.Reader):
                 True if "paywall" else False,
             )
         ]
+```
+
+## Watcher
+
+A simple watcher is bundled with the repository to make it easier to watch for
+new articles in desired scrapers. Example usage:
+
+```python
+from svt import SVT
+from dn import DN
+from watcher import Watcher
+
+scrapers = [SVT(), DN()]
+w = Watcher(scrapers, 60)
+
+for a in w.articles():
+    print("New article posted!")
+    print(a)
 ```
