@@ -4,8 +4,19 @@ import header
 
 class VK(header.Reader):
     """
-    VK implements a reader for https://vk.se
+    VK implements a reader for https://vk.se. When the site fetches the news
+    articles it's made with graphql and a body containing a sha256 hash. I have
+    yet to figure out how this is calculated but in the meantime a new intance
+    of VK must be created with the hash. The hash can be found by using the
+    network inspector in a web browser and looking for a HTTP POST request to
+    https://content.vk.se/news/vk/graphql. In the body for that request you
+    should find a siilar rbody to the one in this file.
     """
+
+    def __init__(self, sha256):
+        self.sha256hash = sha256
+
+        super().__init__()
 
     @classmethod
     def url(cls):
@@ -37,8 +48,7 @@ class VK(header.Reader):
 
         return result
 
-    @classmethod
-    def source(cls):
+    def source(self):
         """
         Custom implementation to fetch the source for VK since VK uses GraphQL
         which we may use to fetch the articles.
@@ -51,10 +61,7 @@ class VK(header.Reader):
                 "page": 0,
             },
             "extensions": {
-                "persistedQuery": {
-                    "version": 1,
-                    "sha256Hash": "5690660d118b41a6e129d39fabdfab2c52ed61325d15813825094fbf9f5d0ba0",
-                }
+                "persistedQuery": {"version": 1, "sha256Hash": self.sha256hash}
             },
         }
 
