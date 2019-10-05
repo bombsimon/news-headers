@@ -5,7 +5,6 @@ the news text based.
 """
 
 import webbrowser
-import requests
 
 
 class Header:
@@ -34,30 +33,3 @@ class Header:
         Open a header in the system's configured webbrowser.
         """
         webbrowser.open_new_tab(self.url)
-
-
-class Reader:
-    """
-    Reader is the base class to extend to implement a new news site.
-    """
-
-    def __init__(self):
-        pass
-
-    def url(self):
-        raise NotImplementedError
-
-    def headers(self):
-        raise NotImplementedError
-
-    def source(self):
-        url_source = requests.get(self.url())
-
-        return url_source.text
-
-    def print_cli(self):
-        result = self.headers()
-
-        for header in result:
-            print(header)
-            print()

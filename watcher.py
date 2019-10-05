@@ -42,7 +42,7 @@ class Watcher:
             for scraper in self.scrapers:
                 headers = scraper.headers()
 
-                for header in headers:
+                for header in headers[0:2]:
                     if header.url not in self.seen_articles:
                         yield header
 

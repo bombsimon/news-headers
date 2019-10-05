@@ -14,28 +14,23 @@ including DOM parsing, using GraphQL, parsing `<script>` tags and more. :)
 ## Example usage
 
 ```python
->>> from svt import SVT
->>> from aftonbladet import Aftonbladet
->>>
->>> scraper = SVT()
->>> headers = scraper.headers()
+>> from scraper import Aftonbladet, SVT
+>>> s = SVT()
+>>> headers = s.headers()
 >>> print(headers[0])
-Polisen misstänker hatbrott efter skjutningen i Texas
-Utreder dokument • ”Indikerar att det kan röra sig om hatbrott''
-https://svt.se/nyheter/utrikes/polisen-misstanker-hatbrott-utreder-dokument
->>>
->>> scraper = Aftonbladet()
->>> headers = scraper.headers()
->>> article = headers[5]
->>> print(article)
-Melloartisten har gift sig: Mäktigt
-▸ Bröllop för Nano – 12 år efter förlovningen
-https://www.aftonbladet.se/nojesbladet/a/wP4G3G/nano-omar-och-frida-blum-har-gift-sig
->>>
->>> article.title
-'Melloartisten har gift sig: Mäktigt'
->>> article.url
-'https://www.aftonbladet.se/nojesbladet/a/wP4G3G/nano-omar-och-frida-blum-har-gift-sig'
+Dödsfall som kopplas till e-cigg ökar – ny studie analyserar skadorna
+Forskare: Som att utsättas för senapsgas
+https://svt.se/nyheter/utrikes/antal-dodsfall-kopplade-till-e-cigg-okar
+>>> a = Aftonbladet()
+>>> headers = a.headers()
+>>> print(headers[5])
+Varför ska vi amma för att rädda klimatet?
+Öhagen Britterna kan väl sluta dricka te i stället
+https://www.aftonbladet.se/family/a/P9w4Q5/varfor-ska-vi-amma-for-att-radda-klimatet
+>>> headers[3].title
+Stänger alla butiker – och ger ledigt för fest
+>>> headers[3].url
+https://www.aftonbladet.se/nyheter/a/vQygkp/jysk-ger-alla-anstallda-ledigt--dagen-efter-personalfest
 ```
 
 ## Implement new sub class
@@ -45,7 +40,7 @@ Just extend the `Reader` and implement `ùrl` and `headers`.
 ```python
 import header
 
-class MySite(header.Reader):
+class MySite(Scraper):
     @classmethod
     def url(cls):
         """
@@ -59,7 +54,7 @@ class MySite(header.Reader):
         """
 
         return [
-            headers.Header(
+            header.Header(
                 "A Title",
                 "A text",
                 "https://a-url.se",
@@ -74,8 +69,7 @@ A simple watcher is bundled with the repository to make it easier to watch for
 new articles in desired scrapers. Example usage:
 
 ```python
-from svt import SVT
-from dn import DN
+from scraper import SVT, DN
 from watcher import Watcher
 
 scrapers = [SVT(), DN()]
