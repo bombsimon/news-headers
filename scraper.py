@@ -12,6 +12,9 @@ class Scraper:
     def __init__(self):
         pass
 
+    def name(self):
+        raise NotImplementedError
+
     def url(self):
         raise NotImplementedError
 
@@ -46,6 +49,10 @@ class Aftonbladet(Scraper):
     """
 
     SCRIPT_TAG_START = "window.FLUX_STATE = "
+
+    @classmethod
+    def name(cls):
+        return "Aftonbladet"
 
     @classmethod
     def url(cls):
@@ -128,6 +135,10 @@ class Aftonbladet(Scraper):
 
 class DN(Scraper):
     @classmethod
+    def name(cls):
+        return "Dagens Nyheter"
+
+    @classmethod
     def url(cls):
         """
         The URL for the site.
@@ -161,6 +172,10 @@ class Expressen(Scraper):
     """
     Expressen implements a reader for https://expressen.se
     """
+
+    @classmethod
+    def name(cls):
+        return "Expressen"
 
     @classmethod
     def url(cls):
@@ -197,6 +212,10 @@ class SVT(Scraper):
     """
     SVT implements a reader for https://svt.se
     """
+
+    @classmethod
+    def name(cls):
+        return "Sveriges Television"
 
     @classmethod
     def url(cls):
@@ -243,6 +262,10 @@ class VK(Scraper):
         self.sha256hash = sha256
 
         super().__init__()
+
+    @classmethod
+    def name(cls):
+        return "Västerbottens-Kuriren"
 
     @classmethod
     def url(cls):
