@@ -70,7 +70,7 @@ class Aftonbladet(Scraper):
 
             # Check if the tag content starts with the JSON assignment.
             if tag.contents[0].startswith(self.SCRIPT_TAG_START):
-                script_tag = tag.contents[0][len(self.SCRIPT_TAG_START):]
+                script_tag = tag.contents[0][len(self.SCRIPT_TAG_START) :]
                 break
 
         if script_tag is None:
@@ -288,7 +288,10 @@ class VK(Scraper):
 
 
 class Fragbite(Scraper):
-
+    """
+    Fragbite implements a reader for fragbite.se
+    News title contains number of comments inside "()"
+    """
     @classmethod
     def url(cls):
         """
