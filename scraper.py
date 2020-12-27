@@ -35,10 +35,10 @@ class Scraper:
 
 class Aftonbladet(Scraper):
     """
-    Aftonbladed implements a reader for https://aftonbladet.se
+    Aftonbladet implements a reader for https://aftonbladet.se
 
     Aftonbladet is quite special since all the content of the site that we need
-    is located as JSON insited a <script> tag where the variable
+    is located as JSON inside a <script> tag where the variable
     `window.FLUX_STATE` is set to this content.
 
     By iterating over the <script> tags and looking for the one starting with an
@@ -70,7 +70,7 @@ class Aftonbladet(Scraper):
 
             # Check if the tag content starts with the JSON assignment.
             if tag.contents[0].startswith(self.SCRIPT_TAG_START):
-                script_tag = tag.contents[0][len(self.SCRIPT_TAG_START) :]
+                script_tag = tag.contents[0][len(self.SCRIPT_TAG_START):]
                 break
 
         if script_tag is None:
@@ -219,11 +219,11 @@ class VK(Scraper):
     """
     VK implements a reader for https://vk.se. When the site fetches the news
     articles it's made with graphql and a body containing a sha256 hash. I have
-    yet to figure out how this is calculated but in the meantime a new intance
+    yet to figure out how this is calculated but in the meantime a new instance
     of VK must be created with the hash. The hash can be found by using the
     network inspector in a web browser and looking for a HTTP POST request to
     https://content.vk.se/news/vk/graphql. In the body for that request you
-    should find a siilar rbody to the one in this file.
+    should find a similar rbody to the one in this file.
     """
 
     def __init__(self, sha256):
@@ -285,3 +285,34 @@ class VK(Scraper):
         )
 
         return response.json()
+
+
+class Fragbite(Scraper):
+
+    @classmethod
+    def url(cls):
+        """
+        The URL for the site.
+        """
+        return "https://fragbite.se"
+
+    def headers(self):
+        """
+        Return a list of all headers for the site.
+        """
+        soup = BeautifulSoup(self.source(), "html.parser")
+
+        result = []
+
+        for article in soup.find_all("div", class_="text"):
+            subheading = article.find("div", class_="subheading")
+
+            result.append(
+                header.Header(
+                    article.h1.get_text(),
+                    subheading.get_text(),
+                    "{}{}".format(self.url(), article.a.get("href")),
+                    False,
+                )
+            )
+        return result
