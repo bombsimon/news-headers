@@ -39,12 +39,16 @@ https://www.aftonbladet.se/nyheter/a/vQygkp/jysk-ger-alla-anstallda-ledigt--dage
 
 ## Implement new sub class
 
-Just extend the `Reader` and implement `ùrl` and `headers`.
+Just extend the `Reader` and implement `name`, `url` and `headers`.
 
 ```python
 import header
 
 class MySite(Scraper):
+    @classmethod
+    def name(cls):
+        return "My Site"
+
     @classmethod
     def url(cls):
         """
