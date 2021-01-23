@@ -328,12 +328,17 @@ class Fragbite(Scraper):
     Fragbite implements a reader for fragbite.se
     News title contains number of comments inside "()"
     """
+
     @classmethod
     def url(cls):
         """
         The URL for the site.
         """
         return "https://fragbite.se"
+
+    @classmethod
+    def name(cls):
+        return "Fragbite"
 
     def headers(self):
         """

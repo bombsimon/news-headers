@@ -6,6 +6,7 @@ including DOM parsing, using GraphQL, parsing `<script>` tags and more. :)
 * [Aftonbladet](https://aftonbladet.se)
 * [DN](https://dn.se)
 * [Expressen](https://expressen.se)
+* [Fragbite](https://fragbite.se/)
 * [SVT](https://svt.se)
 * [VK](https://vk.se)*
 
@@ -21,14 +22,17 @@ including DOM parsing, using GraphQL, parsing `<script>` tags and more. :)
 Dödsfall som kopplas till e-cigg ökar – ny studie analyserar skadorna
 Forskare: Som att utsättas för senapsgas
 https://svt.se/nyheter/utrikes/antal-dodsfall-kopplade-till-e-cigg-okar
+
 >>> a = Aftonbladet()
 >>> headers = a.headers()
 >>> print(headers[5])
 Varför ska vi amma för att rädda klimatet?
 Öhagen Britterna kan väl sluta dricka te i stället
 https://www.aftonbladet.se/family/a/P9w4Q5/varfor-ska-vi-amma-for-att-radda-klimatet
+
 >>> headers[3].title
 Stänger alla butiker – och ger ledigt för fest
+
 >>> headers[3].url
 https://www.aftonbladet.se/nyheter/a/vQygkp/jysk-ger-alla-anstallda-ledigt--dagen-efter-personalfest
 ```
