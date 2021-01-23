@@ -1,8 +1,6 @@
 import json
-
 import requests
 from bs4 import BeautifulSoup
-
 import header
 
 
@@ -13,6 +11,9 @@ class Scraper:
 
     def __init__(self):
         pass
+
+    def name(self):
+        raise NotImplementedError
 
     def url(self):
         raise NotImplementedError
@@ -29,7 +30,7 @@ class Scraper:
         headers = self.headers()
 
         for news_header in headers:
-            print(header)
+            print(news_header)
             print()
 
 
@@ -48,6 +49,10 @@ class Aftonbladet(Scraper):
     """
 
     SCRIPT_TAG_START = "window.FLUX_STATE = "
+
+    @classmethod
+    def name(cls):
+        return "Aftonbladet"
 
     @classmethod
     def url(cls):
@@ -93,27 +98,46 @@ class Aftonbladet(Scraper):
 
             for sub_item in item["items"]:
                 # We're looking for teasers to fetch.
-                if sub_item["type"] != "teaser":
+                if sub_item["type"] != "box":
                     continue
 
-                # And we require them to have a text.
-                if "text" not in sub_item:
+                if "clickTracking" not in sub_item:
                     continue
 
-                result.append(
-                    header.Header(
-                        sub_item["title"]["value"],
-                        sub_item["text"]["value"],
-                        sub_item["target"]["expandedUri"]
-                        if sub_item["target"]["type"] == "link:internal"
-                        else sub_item["target"]["uri"],
-                    )
-                )
+                if "object" not in sub_item["clickTracking"]:
+                    continue
+
+                if "name" not in sub_item["clickTracking"]["object"]:
+                    continue
+
+                title = sub_item["clickTracking"]["object"]["name"]
+                text = self._find_text(sub_item)
+                link = sub_item["clickTracking"]["target"]["url"]
+
+                result.append(header.Header(title, text, link,))
 
         return result
 
+    def _find_text(self, item):
+        r = self._traverse_items(item, [])
+        return r[len(r) - 1]
+
+    def _traverse_items(self, item, found):
+        if "text" in item and "value" in item["text"]:
+            found.append(item["text"]["value"])
+
+        if "items" in item:
+            for i in item["items"]:
+                self._traverse_items(i, found)
+
+        return found
+
 
 class DN(Scraper):
+    @classmethod
+    def name(cls):
+        return "Dagens Nyheter"
+
     @classmethod
     def url(cls):
         """
@@ -150,6 +174,10 @@ class Expressen(Scraper):
     """
 
     @classmethod
+    def name(cls):
+        return "Expressen"
+
+    @classmethod
     def url(cls):
         """
         The URL for the site.
@@ -184,6 +212,10 @@ class SVT(Scraper):
     """
     SVT implements a reader for https://svt.se
     """
+
+    @classmethod
+    def name(cls):
+        return "Sveriges Television"
 
     @classmethod
     def url(cls):
@@ -230,6 +262,10 @@ class VK(Scraper):
         self.sha256hash = sha256
 
         super().__init__()
+
+    @classmethod
+    def name(cls):
+        return "Västerbottens-Kuriren"
 
     @classmethod
     def url(cls):
