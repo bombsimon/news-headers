@@ -318,4 +318,5 @@ class Fragbite(Scraper):
                     False,
                 )
             )
+
         return result
