@@ -89,12 +89,16 @@ class Aftonbladet(Scraper):
         random_key = list(articles.keys())[0]
         items = articles[random_key]["contents"]["items"]
 
+        skip_items = ["0:e-salesposter"]
+
         result = []
 
         for item_id, item in items.items():
-            # No more articles if we no longer find the "abse" key.
-            if "abse" not in item_id:
-                break
+            if item_id in skip_items:
+                continue
+
+            if "items" not in item:
+                continue
 
             for sub_item in item["items"]:
                 # We're looking for teasers to fetch.
@@ -113,8 +117,13 @@ class Aftonbladet(Scraper):
                 title = sub_item["clickTracking"]["object"]["name"]
                 text = self._find_text(sub_item)
                 link = sub_item["clickTracking"]["target"]["url"]
+                premium = "plus-article" or "plus-sport-article" in item_id
 
-                result.append(header.Header(title, text, link,))
+                # Avoid duplication if the content is just the title.
+                if text == title:
+                    text = None
+
+                result.append(header.Header(title, text, link, premium))
 
         return result
 
