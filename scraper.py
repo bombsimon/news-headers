@@ -154,6 +154,9 @@ class DN(Scraper):
         result = []
 
         for article in soup.find_all("a", class_="teaser"):
+            if article.h1 is None:
+                continue
+
             result.append(
                 header.Header(
                     " ".join(article.h1.get_text().split()),
